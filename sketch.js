@@ -1,21 +1,36 @@
 var socket;
+var width, height;
 
 function setup() {
 	socket = io.connect('http://localhost:3000');
-	createCanvas(2600, 480);
+	// socket = io(); // alternative instatiator
+	socket.on('render', renderDisplay);
+	socket.on('connected', initConnection);
+	socket.on('disconnected', closeConnection);
 
-	socket.on('mouse',
-    	// When we receive data
-		function(data) {
-			console.log("Got: " + data.x + " " + data.y);
-			// Draw a blue circle
-			fill(0,0,255);
-			noStroke();
-			ellipse(data.x,data.y,80,80);
-		}
-	);
+	createCanvas(2600, 480);
 }
 
 function draw() {
-	ellipse(50, 50, 80, 80);
+	ellipse(5, 5, 5, 5);
 }
+
+
+function renderDisplay(data) {
+	width = data.x;
+	height = data.y;
+
+	ellipse(width, height, 100, 100);
+}
+
+function initConnection(data) {
+	console.log(data);
+	fill(0, 255, 0);
+}
+
+function closeConnection(data) {
+	console.log(data);
+	fill(255, 0, 0);
+}
+
+
