@@ -8,14 +8,20 @@ var io = require('socket.io').listen(server);
 console.log('Server started on port 3000');
 
 
-io.sockets.on('connection', 
-		function (socket) {
-			console.log("new client: " + socket.id);
-			socket.on('disconnect', function() {
-				console.log('client has disconnected');
-			});
-		}
-);
+io.sockets.on('connection',	function (socket) {
+	console.log("new client: " + socket.id);
+
+	socket.on('mouse', function (data) {
+		console.log('rcvd: "mouse" ' + data.x + ' ' + data.y);
+		socket.broadcast.emit('mouse', data);
+		// to send to everyone, including server
+		// io.sockets.emit('message', "this goes to everyone");
+	});
+
+	socket.on('disconnect', function() {
+		console.log('client has disconnected');
+	});
+});
 
 
 function handleRequest(req, res) {
