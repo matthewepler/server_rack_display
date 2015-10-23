@@ -4,10 +4,19 @@ var fs   = require('fs');
 
 var server = http.createServer(handleRequest);
 server.listen(3000);
-
 var io = require('socket.io').listen(server);
-
 console.log('Server started on port 3000');
+
+
+io.sockets.on('connection', 
+		function (socket) {
+			console.log("new client: " + socket.id);
+			socket.on('disconnect', function() {
+				console.log('client has disconnected');
+			});
+		}
+);
+
 
 function handleRequest(req, res) {
 	var pathname = req.url;
