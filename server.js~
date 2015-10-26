@@ -27,4 +27,8 @@ socketServer.on('connection', function(socket) {
 	});
 });
 
-
+app.get('/update', function(req, res) {
+	console.log(req.query);
+	socketServer.broadcast.emit('render', req.query);
+	res.end('bye');
+});

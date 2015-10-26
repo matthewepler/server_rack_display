@@ -17,6 +17,7 @@ function draw() {
 
 
 function renderDisplay(data) {
+	console.log("got data: " + data);
 	width = data.x;
 	height = data.y;
 

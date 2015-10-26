@@ -1,0 +1,19 @@
+var exec = require('child_process').exec;
+
+var x = 0;
+var y = 100;
+
+setInterval( function() {
+	var cmd = "curl -X GET 'http://localhost:3000/update?";
+	x = x + 1;
+	cmd +='x=' + x + '&y=' + y + "'";
+	console.log(cmd);
+	exec(cmd, function(error, stdout, stderr) {
+	//	console.log(stdout.toString('utf8'));
+	//	console.log(stderr.toString('utf8'));
+		if (error) {
+	//		console.log("ERROR: ");
+	//		console.log(error);
+		}
+	});
+}, 500);

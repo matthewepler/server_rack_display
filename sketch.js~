@@ -4,6 +4,10 @@ var width, height;
 function setup() {
 	socket = io.connect('http://localhost:3000');
 	// socket = io(); // alternative instatiator
+	socket.on('render', renderDisplay);
+	socket.on('connected', initConnection);
+	socket.on('disconnected', closeConnection);
+
 	createCanvas(2600, 480);
 }
 
@@ -11,9 +15,6 @@ function draw() {
 	ellipse(5, 5, 5, 5);
 }
 
-socket.on('render', renderDisplay);
-socket.on('connected', initConnection);
-socket.on('disconnected', closeConnection);
 
 function renderDisplay(data) {
 	width = data.x;
