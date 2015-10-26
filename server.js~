@@ -22,8 +22,8 @@ socketServer.on('connection', function(socket) {
 	});
 
 	socket.on('update', function(data) {
-		console.log('server sez: update!');
-		socket.emit('render', data);
+		console.log('update rcvd ' + data);
+		socket.broadcast.emit('render', data);
 	});
 });
 
