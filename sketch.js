@@ -1,5 +1,7 @@
 var socket;
 var width, height;
+var circleSize = 150;
+var counter;
 
 function setup() {
 	socket = io.connect('http://localhost:3000');
@@ -8,12 +10,23 @@ function setup() {
 	socket.on('connected', initConnection);
 	socket.on('disconnected', closeConnection);
 
-	createCanvas(2600, 480);
+	createCanvas(3840, 716);
 }
 
 function draw() {
-	ellipse(5, 5, 5, 5);
 }
+
+setInterval(function() {
+	background(0);
+	fill(255);
+	ellipse(circleSize * counter, windowHeight/2, circleSize, circleSize);
+	if (counter < windowWidth/circleSize){
+		counter += 1;
+		console.log(counter);
+	} else {
+		counter = 0;
+	}
+}, 200);
 
 
 function renderDisplay(data) {
