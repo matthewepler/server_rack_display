@@ -11,6 +11,8 @@ function setup() {
 	socket.on('disconnected', closeConnection);
 
 	createCanvas(3840, 716);
+	stroke(255);
+	noFill();
 }
 
 function draw() {
@@ -18,11 +20,9 @@ function draw() {
 
 setInterval(function() {
 	background(0);
-	fill(255);
 	ellipse(circleSize * counter, windowHeight/2, circleSize, circleSize);
 	if (counter < windowWidth/circleSize){
 		counter += 1;
-		console.log(counter);
 	} else {
 		counter = 0;
 	}
@@ -31,15 +31,14 @@ setInterval(function() {
 
 function renderDisplay(data) {
 	console.log("got data: " + data);
-	width = data.x;
-	height = data.y;
-
-	ellipse(width, height, 100, 100);
+//	width = data.x;
+//	height = data.y;
 }
 
 function initConnection(data) {
 	console.log(data);
-	fill(0, 255, 0);
+	fill(255);
+	noStroke();
 }
 
 function closeConnection(data) {
