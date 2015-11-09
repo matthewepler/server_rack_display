@@ -28,7 +28,8 @@ socketServer.on('connection', function(socket) {
 });
 
 app.get('/update', function(req, res) {
-	console.log(req.query);
+	console.log("app rec'd query: " + req.query);
 	socketServer.emit('render', req.query);
+	res.header('Access-Control-Allow-Origin', '*');
 	res.end('bye');
 });

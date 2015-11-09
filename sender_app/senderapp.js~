@@ -38,5 +38,5 @@ function draw() {
 }
 
 function sendVals() {
-	console.log("CPU Load = " + cpuLoad + ", " + "RAM Use  = " + ramUse	+ ", " + cpuTemp + " + cpuTemp");
+	console.log("CPU Load = " + cpuLoad + ", " + "RAM Use  = " + ramUse	+ ", " + "CPU Temp = " + cpuTemp);
 }

@@ -16,23 +16,12 @@ function setup() {
 }
 
 function draw() {
-}
-
-setInterval(function() {
 	background(0);
-	ellipse(circleSize * counter, windowHeight/2, circleSize, circleSize);
-	if (counter < windowWidth/circleSize){
-		counter += 1;
-	} else {
-		counter = 0;
-	}
-}, 200);
+}
 
 
 function renderDisplay(data) {
-	console.log("got data: " + data);
-//	width = data.x;
-//	height = data.y;
+	console.log("got data: " + JSON.stringify(data));
 }
 
 function initConnection(data) {
