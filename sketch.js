@@ -46,8 +46,8 @@ function setup() {
 }
 
 function draw() {
+	background(0);
 	if (bars.length > 0) { // draw bars
-		background(0);
 		for (var i=0; i<bars.length; i++) {
 			if (bars[i].dead) {
 				bars.splice(i, 1);
@@ -56,15 +56,8 @@ function draw() {
 				bars[i].display();
 			}
 		}
-	} else { 			// standby graphic
-		push();
-		translate(width/2, height/2);
-		fill(0);
-		stroke(9, 80, 255);
-		rotate(angle);
-		rect(125, 0, 30, 30);
-		pop();
-		angle >= 360 ? angle=0 : angle += 2;
+	} else { 
+		drawStandby();		// standby graphic
 	}
 }
 
@@ -94,6 +87,8 @@ function renderDisplay(data) {
 		cpuTempSample = 0;
 		sampleCounter = 0;
 		prevTime = currTime;
+
+		createBars(); // this is where you left off - define this
 	}
 }
 
@@ -125,4 +120,22 @@ function Bar(startY, barHeight, color) {
 	}
 }
 
+function createBars() {
 
+}
+
+function drawStandby() {
+	push();
+		translate(width/2, height/2);
+		fill(9,80,255);
+		noStroke();
+		rotate(angle);
+		ellipse(125, 0, 30, 30);
+		fill(9,80,255, 200);
+		rotate(angle-5);
+		ellipse(125, 0, 30, 30);
+
+	pop();
+	angle >= 360 ? angle=0 : angle += 2;
+
+}

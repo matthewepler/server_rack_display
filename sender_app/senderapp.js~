@@ -33,12 +33,12 @@ function draw() {
 }
 
 function sendVals() {
-	console.log("CPU Load = " + cpuLoad + ", " + "RAM Use  = " + ramUse	+ ", " + "CPU Temp = " + cpuTemp);
+//	console.log("CPU Load = " + cpuLoad + ", " + "RAM Use  = " + ramUse	+ ", " + "CPU Temp = " + cpuTemp);
 
 	var ranAmnt = 5;
-	if (cpuLoadRan == true) cpuLoad += random(ranAmnt * -1, ranAmnt);
-	if (ramUseRan  == true) ramUse  += random(ranAmnt * -1, ranAmnt);
-	if (cpuTempRan == true) cpuTemp += random(ranAmnt * -1, ranAmnt);
+	if (cpuLoadRan === true) cpuLoad += random(ranAmnt * -1, ranAmnt);
+	if (ramUseRan  === true) ramUse  += random(ranAmnt * -1, ranAmnt);
+	if (cpuTempRan === true) cpuTemp += random(ranAmnt * -1, ranAmnt);
 
 	// GET request to other server, running locally @
 	var baseURL = "http://localhost:3000/update?";

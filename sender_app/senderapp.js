@@ -33,7 +33,7 @@ function draw() {
 }
 
 function sendVals() {
-	console.log("CPU Load = " + cpuLoad + ", " + "RAM Use  = " + ramUse	+ ", " + "CPU Temp = " + cpuTemp);
+//	console.log("CPU Load = " + cpuLoad + ", " + "RAM Use  = " + ramUse	+ ", " + "CPU Temp = " + cpuTemp);
 
 	var ranAmnt = 5;
 	if (cpuLoadRan === true) cpuLoad += random(ranAmnt * -1, ranAmnt);
