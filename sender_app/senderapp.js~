@@ -39,4 +39,19 @@ function draw() {
 
 function sendVals() {
 	console.log("CPU Load = " + cpuLoad + ", " + "RAM Use  = " + ramUse	+ ", " + "CPU Temp = " + cpuTemp);
+	
+	// GET request to other server, running locally @
+	var baseURL = "http://localhost:3000/update?";
+	baseURL += "cpuLoad="  + cpuLoad;
+	baseURL += "&ramUse="  + ramUse;
+	baseURL += "&cpuTemp=" + cpuTemp;
+
+	httpGet(baseURL, null, null, null, function(err) {
+		console.log(err);
+	});
+
+
+
+
+
 }
