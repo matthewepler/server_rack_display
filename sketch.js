@@ -1,9 +1,17 @@
 // connection 
 var socket;
 
+// data
+var prevTime;
+var sampleWindow;
+var cpuLoadSample, ramUseSample, cpuTempSample;
+var cpuLoadRan, ramUseRan, cpuTempRan;
+var sampleCounter;
+
 // drawing 
 var cpuLoad, ramUse, cpuTemp;
 var startHeight;
+var angle;
 
 // objects
 var initBars = 3;
@@ -12,25 +20,34 @@ var init;
 
 
 function setup() {
+	// drawing environment setup
 	createCanvas(500, 500);
 	background(0);
-	for (var i=0; i<initBars; i++) {
-		bars.push( new Bar( (height/initBars) * i, 'rgba(9, 80, 255, '));
-	}
+	bars.push( new Bar( 0, height, 'rgba(9, 80, 255, '));
+	angle = 0;
+	angleMode(DEGREES);
 
+	// socket conncetion starts after 3 seconds beause humans like startup processes
 	setTimeout( function() {
-		background(0);
 		socket = io.connect('http://localhost:3000');
 		// socket = io(); // alternative instatiator
 		socket.on('render', renderDisplay);
 		socket.on('connected', initConnection);
 		socket.on('disconnected', closeConnection);
 	}, 3000);
+
+	// data 
+	sampleWindow = 1000;   // average readings every sec and use them to draw
+	prevTime = 0;
+	cpuLoadSample, ramUseSample, cpuTempSample = 0;
+	cpuLoadRan, ramUseRan, cpuTempRan = 0;
+	cpuLoad, ramUse, cpuTemp = 0;
+	sampleCounter = 0;
 }
 
 function draw() {
-	if (bars.length > 0) {
-		background(255);
+	if (bars.length > 0) { // draw bars
+		background(0);
 		for (var i=0; i<bars.length; i++) {
 			if (bars[i].dead) {
 				bars.splice(i, 1);
@@ -39,49 +56,72 @@ function draw() {
 				bars[i].display();
 			}
 		}
+	} else { 			// standby graphic
+		push();
+		translate(width/2, height/2);
+		fill(0);
+		stroke(9, 80, 255);
+		rotate(angle);
+		rect(125, 0, 30, 30);
+		pop();
+		angle >= 360 ? angle=0 : angle += 2;
 	}
 }
 
 
 function renderDisplay(data) {
-	console.log("got data: " + JSON.stringify(data));
-	cpuLoad = data.cpuLoad / 100;
-	ramUse  = data.ramUse  / 100;
-	cpuTemp = data.cpuTemp / 100;
-	
-	//startHeight = height - cpuLoad*height;
+	var currTime = millis();
 
+	console.log(JSON.stringify(data));
+
+	cpuLoadSample += data.cpuLoad / 100;	
+	ramUseSample  += data.ramUse  / 100;
+	cpuTempSample += data.cpuTemp / 100;
+	cpuLoadRan = data.cpuLoadRan;
+	ramUseRan  = data.ramUseRan;
+	cpuTempRan = data.cpuTempRan;
+	sampleCounter += 1;
+	
+	if (currTime - prevTime > sampleWindow && sampleCounter > 0) {
+		cpuLoad = cpuLoadSample / sampleCounter;
+		ramUse  = ramUseSample  / sampleCounter;
+		cpuTemp = cpuTempSample / sampleCounter;
+
+		console.log("average cpuLoad = " + cpuLoad);
+
+		cpuLoadSample = 0;
+		ramUseSample  = 0;
+		cpuTempSample = 0;
+		sampleCounter = 0;
+		prevTime = currTime;
+	}
 }
 
 function initConnection(data) {
 	console.log(data);
-	fill(255);
-	noStroke();
-
 }
 
 function closeConnection(data) {
 	console.log(data);
-	fill(255, 0, 0);
 }
 
-function Bar(startY, color) {
-	this.x = 0;
-	this.y = startY;
+function Bar(startY, barHeight, color) {
+	this.x     = 0;
+	this.y     = startY;
+	this.height= barHeight;
 	this.color = color;
 	this.alpha = 1;
-	this.dead = false;
+	this.dead  = false;
 
 	this.display = function() {
 		noStroke();
 		var colString = color + this.alpha + ')';
 		fill(colString);
-		rect(0, this.y, width, height - this.y);
+		rect(0, this.y, width, this.height);
 	}
 
 	this.update = function() {
 		this.alpha <= 0 ? this.dead = true : this.alpha -= 0.01;
-		console.log(this.alpha);
 	}
 }
 

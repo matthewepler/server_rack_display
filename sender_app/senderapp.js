@@ -1,35 +1,30 @@
 var slider1, slider2, slider3;
+var checkbox1, checkbox2, checkbox3;
 var cpuLoad, ramUse, cpuTemp;
-var slider1Y = 20;
-var slider2Y = 140;
-var slider3Y = 260;
-var spacer = 20;
-
+var cpuLoadRan, ramUseRan, cpuTempRan;
+var slider1Y;
+var slider2Y;
+var slider3Y;
+var spacer;
 
 function setup() {
 	createCanvas(400, 400);
 	textSize(15);
 	noStroke();
-	
-	slider1 = createSlider(0, 100, 50);
-	slider1.position(20, slider1Y + spacer); // room for text on top
-	slider1.changed(sendVals);
-	slider2 = createSlider(0, 100, 50);
-	slider2.position(20, slider2Y + spacer);
-	slider2.changed(sendVals);
-	slider3 = createSlider(0, 100, 50);
-	slider3.position(20, slider3Y + spacer);
-	slider3.changed(sendVals);
+	initInterface();	
+	setInterval(sendVals, 150);
 }
 
 function draw() {
 	background(255);
+
 	cpuLoad = slider1.value();
 	text("CPU Load", 20, slider1Y);
 	text(cpuLoad, 20, slider1Y + spacer*3);
+	
 
 	ramUse = slider2.value();
-	text("RAM use", 20, slider2Y);
+	text("RAM Use", 20, slider2Y);
 	text(ramUse, 20, slider2Y + spacer*3);
 
 	cpuTemp = slider3.value();
@@ -39,19 +34,50 @@ function draw() {
 
 function sendVals() {
 	console.log("CPU Load = " + cpuLoad + ", " + "RAM Use  = " + ramUse	+ ", " + "CPU Temp = " + cpuTemp);
-	
+
+	var ranAmnt = 5;
+	if (cpuLoadRan === true) cpuLoad += random(ranAmnt * -1, ranAmnt);
+	if (ramUseRan  === true) ramUse  += random(ranAmnt * -1, ranAmnt);
+	if (cpuTempRan === true) cpuTemp += random(ranAmnt * -1, ranAmnt);
+
 	// GET request to other server, running locally @
 	var baseURL = "http://localhost:3000/update?";
 	baseURL += "cpuLoad="  + cpuLoad;
+	baseURL += "&cpuLoadRan=" + cpuLoadRan;
 	baseURL += "&ramUse="  + ramUse;
+	baseURL += "&ramUseRan="  + ramUseRan;
 	baseURL += "&cpuTemp=" + cpuTemp;
+	baseURL += "&cpuTempRan=" + cpuTempRan;
 
 	httpGet(baseURL, null, null, null, function(err) {
 		console.log(err);
 	});
-
-
-
-
-
 }
+
+function initInterface() {
+	slider1Y = 20;
+	slider2Y = 160;
+	slider3Y = 280;
+	spacer = 20;
+
+	cpuLoadRan, ramUseRan, cpuTempRan = false;
+
+	fill(0);
+	slider1 = createSlider(0, 100, 50);
+	slider1.position(20, slider1Y + spacer); // room for text on top
+	slider1.changed(sendVals);
+	checkbox1 = createCheckbox();
+	checkbox1.position(20, slider1Y+ spacer * 4);
+	checkbox1.changed(function() {
+		checkbox1.checked() ? cpuLoadRan = true : cpuLoadRan = false;	
+		sendVals();
+	});
+
+	slider2 = createSlider(0, 100, 50);
+	slider2.position(20, slider2Y + spacer);
+	slider2.changed(sendVals);
+	slider3 = createSlider(0, 100, 50);
+	slider3.position(20, slider3Y + spacer);
+	slider3.changed(sendVals);	
+}
+
