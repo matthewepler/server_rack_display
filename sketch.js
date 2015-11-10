@@ -12,6 +12,7 @@ var sampleCounter;
 var cpuLoad, ramUse, cpuTemp;
 var startHeight;
 var angle;
+var palettes;
 
 // objects
 var initBars = 3;
@@ -26,6 +27,7 @@ function setup() {
 	bars.push( new Bar( 0, height, 'rgba(9, 80, 255, '));
 	angle = 0;
 	angleMode(DEGREES);
+	initPalettes();
 
 	// socket conncetion starts after 3 seconds beause humans like startup processes
 	setTimeout( function() {
@@ -37,7 +39,7 @@ function setup() {
 	}, 3000);
 
 	// data 
-	sampleWindow = 1000;   // average readings every sec and use them to draw
+	sampleWindow = 50;   // average readings every sec and use them to draw
 	prevTime = 0;
 	cpuLoadSample, ramUseSample, cpuTempSample = 0;
 	cpuLoadRan, ramUseRan, cpuTempRan = 0;
@@ -65,7 +67,7 @@ function draw() {
 function renderDisplay(data) {
 	var currTime = millis();
 
-	console.log(JSON.stringify(data));
+	//console.log(JSON.stringify(data));
 
 	cpuLoadSample += data.cpuLoad / 100;	
 	ramUseSample  += data.ramUse  / 100;
@@ -80,7 +82,7 @@ function renderDisplay(data) {
 		ramUse  = ramUseSample  / sampleCounter;
 		cpuTemp = cpuTempSample / sampleCounter;
 
-		console.log("average cpuLoad = " + cpuLoad);
+		//console.log("average cpuLoad = " + cpuLoad);
 
 		cpuLoadSample = 0;
 		ramUseSample  = 0;
@@ -88,7 +90,7 @@ function renderDisplay(data) {
 		sampleCounter = 0;
 		prevTime = currTime;
 
-		createBars(); // this is where you left off - define this
+		createBars();
 	}
 }
 
@@ -110,18 +112,29 @@ function Bar(startY, barHeight, color) {
 
 	this.display = function() {
 		noStroke();
-		var colString = color + this.alpha + ')';
+		var colString = this.color + this.alpha + ')';
 		fill(colString);
 		rect(0, this.y, width, this.height);
 	}
 
 	this.update = function() {
-		this.alpha <= 0 ? this.dead = true : this.alpha -= 0.01;
+		this.alpha <= 0.0 ? this.dead = true : this.alpha -= 0.01;
 	}
 }
 
 function createBars() {
+	// cpuLoad = overall height
+	var maxHeight = cpuLoad * height;
 
+	// cpuTemp = color of bars
+	var palette = floor( map(cpuTemp, 0, 1, 0, 5));
+	console.log(palette);
+
+	// ramUse  = number of bars
+	var numBars = map(ramUse, 0, 1, maxHeight/15, 0);
+	for (var i=0; i<numBars; i++) {
+		bars.push( new Bar(random( height, height - maxHeight), maxHeight/numBars, palettes[palette][floor(random(0, 5))]));
+	}
 }
 
 function drawStandby() {
@@ -138,4 +151,44 @@ function drawStandby() {
 	pop();
 	angle >= 360 ? angle=0 : angle += 2;
 
+}
+
+function initPalettes() { // if you change number of palettes/color, be sure to also change variables in createBars();
+	palettes = [
+		[
+			['rgba(9, 80, 255, '],
+			['rgba(68, 178, 255, '],
+			['rgba(20, 52, 135, '],
+			['rgba(63, 66, 135, '],
+			['rgba(22, 40, 135, ']
+		],
+		[
+			['rgba(12, 120, 135, '],
+			['rgba(76, 135, 132, '],
+			['rgba(94, 234, 218, '],
+			['rgba(26, 234, 167, '],
+			['rgba(10, 141, 114, ']
+		],
+		[
+    		['rgba(11, 141, 69, '],
+			['rgba(20, 233, 60, '],
+			['rgba(45, 82, 40, '],
+			['rgba(99, 175, 63, '],
+			['rgba(133, 175, 62, ']
+		],
+		[
+			['rgba(175, 156, 37, '],
+			['rgba(236, 211, 5, '],
+			['rgba(211, 161, 27, '],
+			['rgba(160, 121, 21, '],
+			['rgba(241, 102, 13, ']
+		],
+		[
+    		['rgba(241, 48, 8, '],
+			['rgba(151, 30, 5, '],
+			['rgba(151, 32, 55, '],
+			['rgba(240, 50, 88, '],
+			['rgba(240, 26, 7, ']
+		]
+	];
 }
