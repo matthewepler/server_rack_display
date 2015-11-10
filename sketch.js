@@ -22,7 +22,7 @@ var init;
 
 function setup() {
 	// drawing environment setup
-	createCanvas(500, 500);
+	// createCanvas(500, 500);
 	background(0);
 	bars.push( new Bar( 0, height, 'rgba(9, 80, 255, '));
 	angle = 0;
