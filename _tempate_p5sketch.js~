@@ -6,9 +6,11 @@ var prevTime;
 var sampleWindow;
 var cpuLoadSample, ramUseSample, cpuTempSample;
 var cpuLoadRan, ramUseRan, cpuTempRan;
+var sampleCounter;
 
 // drawing 
 var cpuLoad, ramUse, cpuTemp;
+var startHeight;
 var angle;
 var palettes;
 
@@ -24,46 +26,47 @@ function setup() {
 
 function draw() {
 	background(0);
-	//console.log(objects.length);
-	if (objects.length > 0) {
-		for (var i=0; i<objects.length; i++) {
-			if (!objects[i].dead) {
-				objects[i].update();
-				objects[i].display();
-			} else {
-				objects.splice(i, 1);
-			}
-		}
-	} else {
-		drawStandby();
-	}
+
 	// call object update/draw methods 
 }
 
 function createObjects() { // assing vars to object attr.
-	// cpuLoad = frequency 
-	var frequency = floor( map(cpuLoad, 0, 1, 500, 50));
-	var margin = random(-100, 100);
-	var currTime = millis();
-	if (currTime - prevTime > frequency + margin) {
-		objects.push( new Ring(0) );
-		prevTime = currTime;
-	}
+	// cpuLoad = 
 
-	// cpuTemp = color 
+	// cpuTemp = 
 	var palette = floor( map(cpuTemp, 0, 1, 0, 5));
 
-	// ramUse = starting diameter 
+	// ramUse = 
 }
 
 function renderDisplay(data) {
+	var currTime = millis();
+
 	//console.log(JSON.stringify(data));
 
-	cpuLoad = data.cpuLoad / 100;	
-	ramUse  = data.ramUse  / 100;
-	cpuTemp = data.cpuTemp / 100;
-		
-	createObjects();
+	cpuLoadSample += data.cpuLoad / 100;	
+	ramUseSample  += data.ramUse  / 100;
+	cpuTempSample += data.cpuTemp / 100;
+	cpuLoadRan = data.cpuLoadRan;
+	ramUseRan  = data.ramUseRan;
+	cpuTempRan = data.cpuTempRan;
+	sampleCounter += 1;
+	
+	if (currTime - prevTime > sampleWindow && sampleCounter > 0) {
+		cpuLoad = cpuLoadSample / sampleCounter;
+		ramUse  = ramUseSample  / sampleCounter;
+		cpuTemp = cpuTempSample / sampleCounter;
+
+		//console.log("average cpuLoad = " + cpuLoad);
+
+		cpuLoadSample = 0;
+		ramUseSample  = 0;
+		cpuTempSample = 0;
+		sampleCounter = 0;
+		prevTime = currTime;
+
+		createObjects();
+	}
 }
 
 function initConnection(data) {
@@ -143,10 +146,12 @@ function initEnvironment() {
 	}, 3000);
 
 	// data 
-	prevTime = 3000;
+	sampleWindow = 50;   // average readings every sec and use them to draw
+	prevTime = 0;
 	cpuLoadSample, ramUseSample, cpuTempSample = 0;
 	cpuLoadRan, ramUseRan, cpuTempRan = 0;
 	cpuLoad, ramUse, cpuTemp = 0;
+	sampleCounter = 0;
 
 	// drawing
 	angle = 0;
@@ -154,4 +159,5 @@ function initEnvironment() {
 
 	// objects
 	objects = [];
+
 }

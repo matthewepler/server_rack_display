@@ -48,6 +48,7 @@ function createObjects() { // assing vars to object attr.
 	if (currTime - prevTime > frequency + margin) {
 		objects.push( new Ring(0) );
 		prevTime = currTime;
+		console.log('here');
 	}
 
 	// cpuTemp = color 
