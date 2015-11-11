@@ -1,16 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 	<head>
-		<script src="p5.min.js"></script>
-		<script src="sketch.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
-		<style>
-			* {
-				padding:0px;
-				margin:0px;
-			}
-		</style>
 	</head>
 	<body>
+		<div>
+			<p> Hi there. You got the server started! You're fantastic. </p>
+			<p> If you're running this locally without live data, you need to start the controller app. Navigate in your terminal to the ?server_rack > sender_app and run a local server there, for example 'python -m SimpleHTTPServer 8000'. This will send data to this app.	</p>
+		</div>
+		<div>
+			<h3>Visualization Modes</h3>
+		</div>
+		<div id="modes">
+			<a href="/bars"><img src="img/bars.png" width="200px" height="200px"></a>
+			<a href="/balls"><img src="img/balls.png" width="200px" height="200px"></a>
+		</div>
 	</body>
 </html>
+
