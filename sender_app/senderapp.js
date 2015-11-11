@@ -56,8 +56,8 @@ function sendVals() {
 
 function initInterface() {
 	slider1Y = 20;
-	slider2Y = 160;
-	slider3Y = 280;
+	slider2Y = 140;
+	slider3Y = 260;
 	spacer = 20;
 
 	cpuLoadRan, ramUseRan, cpuTempRan = false;
@@ -66,12 +66,12 @@ function initInterface() {
 	slider1 = createSlider(0, 100, 50);
 	slider1.position(20, slider1Y + spacer); // room for text on top
 	slider1.changed(sendVals);
-	checkbox1 = createCheckbox();
-	checkbox1.position(20, slider1Y+ spacer * 4);
-	checkbox1.changed(function() {
-		checkbox1.checked() ? cpuLoadRan = true : cpuLoadRan = false;	
-		sendVals();
-	});
+	//checkbox1 = createCheckbox();
+	//checkbox1.position(20, slider1Y+ spacer * 4);
+	//checkbox1.changed(function() {
+	//	checkbox1.checked() ? cpuLoadRan = true : cpuLoadRan = false;	
+	//	sendVals();
+	//});
 
 	slider2 = createSlider(0, 100, 50);
 	slider2.position(20, slider2Y + spacer);

@@ -3,17 +3,17 @@
 
 function Ball() {
 	this.size = 48;
-	this.position = createVector(width/2, height/2);
+	this.position = createVector(random(0, width), random(0, height) );
 	this.acceleration = createVector(3, 10);
-	this.topspeed = 10;
-
+	this.color = color(127);
+	
 	this.update = function() {
 		this.position.add(this.acceleration);
 	}
 	
 	this.display = function() {
 		noStroke();
-		fill(127);
+		fill(this.color);
 		ellipse(this.position.x, this.position.y, this.size, this.size);
 	}
 

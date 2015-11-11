@@ -9,9 +9,12 @@ var cpuLoadRan, ramUseRan, cpuTempRan;
 var sampleCounter;
 var cpuLoad, ramUse, cpuTemp;
 
+// drawing
+var angle;
+
 // objects
 var palettes;
-var ball;
+var balls;
 
 
 function setup() {
@@ -35,15 +38,28 @@ function setup() {
 	cpuLoad, ramUse, cpuTemp = 0;
 	sampleCounter = 0;
 
-	ball = new Ball();
+	// drawing
+	angleMode(DEGREES);
+	angle = 0;
+
+	// objects
+	balls = [];
 }
 
 function draw() {
 	background(0);
+	
+	if (balls.length > 0) {
 
-	ball.update();
-	ball.checkEdges();
-	ball.display();
+	} else {
+		drawStandby();
+	}
+	
+	for (var i=0; i<balls.length; i++) {
+		balls[i].update();
+		balls[i].checkEdges();
+		balls[i].display();
+	}
 }
 
 
@@ -73,7 +89,41 @@ function renderDisplay(data) {
 		sampleCounter = 0;
 		prevTime = currTime;
 
-		createBars();
+	    createBalls();
+	}
+}
+
+function createBalls() {
+	// Ram Use  = number
+	var numBalls = floor( map(ramUse, 0, 1, 0, 100));
+	if (balls.length < numBalls) {
+		for (var i=0; i< numBalls - balls.length; i++) {
+			balls.push( new Ball() );
+		}
+	} else if (balls.length > numBalls) {
+		balls.splice(numBalls, balls.length - numBalls);
+	}
+
+	// CPU Load = speed
+	var baseSpeed = floor( map(cpuLoad, 0, 1, 0.5, 17));
+	for (var i=0; i<balls.length; i++) {
+		if( baseSpeed > 0) {
+			var currXaccel = balls[i].acceleration.x;
+			var newXaccel  = random (baseSpeed - 2, baseSpeed + 2);
+			if (currXaccel < 0 ) newXaccel *= -1;
+			balls[i].acceleration.x = newXaccel;
+
+			var currYaccel = balls[i].acceleration.y;
+			var newYaccel  = baseSpeed;
+			if (currYaccel < 0) newYaccel *= -1;
+			balls[i].acceleration.y = newYaccel;
+		}
+	}
+
+	// CPU Temp = color
+	var palette = floor( map(cpuTemp, 0, 1, 0, 5));
+	for (var i=0; i<balls.length; i++) {
+		balls[i].color = 
 	}
 }
 
@@ -106,39 +156,39 @@ function drawStandby() {
 function initPalettes() { // if you change number of palettes/color, be sure to also change variables in createBars();
 	palettes = [
 		[
-			['rgba(9, 80, 255, '],
-			['rgba(68, 178, 255, '],
-			['rgba(20, 52, 135, '],
-			['rgba(63, 66, 135, '],
-			['rgba(22, 40, 135, ']
+			['rgb(9, 80, 255)'],
+			['rgb(68, 178, 255)'],
+			['rgb(20, 52, 135)'],
+			['rgb(63, 66, 135)'],
+			['rgb(22, 40, 135)']
 		],
 		[
-			['rgba(12, 120, 135, '],
-			['rgba(76, 135, 132, '],
-			['rgba(94, 234, 218, '],
-			['rgba(26, 234, 167, '],
-			['rgba(10, 141, 114, ']
+			['rgb(12, 120, 135)'],
+			['rgb(76, 135, 132)'],
+			['rgb(94, 234, 218)'],
+			['rgb(26, 234, 167)'],
+			['rgb(10, 141, 114)']
 		],
 		[
-    		['rgba(11, 141, 69, '],
-			['rgba(20, 233, 60, '],
-			['rgba(45, 82, 40, '],
-			['rgba(99, 175, 63, '],
-			['rgba(133, 175, 62, ']
+    		['rgb(11, 141, 69)'],
+			['rgb(20, 233, 60)'],
+			['rgb(45, 82, 40)'],
+			['rgb(99, 175, 63)'],
+			['rgb(133, 175, 62)']
 		],
 		[
-			['rgba(175, 156, 37, '],
-			['rgba(236, 211, 5, '],
-			['rgba(211, 161, 27, '],
-			['rgba(160, 121, 21, '],
-			['rgba(241, 102, 13, ']
+			['rgb(175, 156, 37)'],
+			['rgb(236, 211, 5)'],
+			['rgb(211, 161, 27)'],
+			['rgb(160, 121, 21)'],
+			['rgb(241, 102, 13)']
 		],
 		[
-    		['rgba(241, 48, 8, '],
-			['rgba(151, 30, 5, '],
-			['rgba(151, 32, 55, '],
-			['rgba(240, 50, 88, '],
-			['rgba(240, 26, 7, ']
+    		['rgb(241, 48, 8)'],
+			['rgb(151, 30, 5)'],
+			['rgb(151, 32, 55)'],
+			['rgb(240, 50, 88)'],
+			['rgb(240, 26, 7)']
 		]
 	];
 }
