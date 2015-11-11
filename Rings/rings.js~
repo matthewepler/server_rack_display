@@ -41,20 +41,24 @@ function draw() {
 }
 
 function createObjects() { // assing vars to object attr.
+
+	// ramUse = starting diameter 
+	var startDiameter = map(ramUse, 0, 1, 0, width - (0.15 * width));
+
 	// cpuLoad = frequency 
 	var frequency = floor( map(cpuLoad, 0, 1, 500, 50));
 	var margin = random(-100, 100);
 	var currTime = millis();
 	if (currTime - prevTime > frequency + margin) {
-		objects.push( new Ring(0) );
+		objects.push( new Ring(startDiameter) );
 		prevTime = currTime;
-		console.log('here');
 	}
 
 	// cpuTemp = color 
 	var palette = floor( map(cpuTemp, 0, 1, 0, 5));
-
-	// ramUse = starting diameter 
+	for (var i=0; i<objects.length; i++) {
+		objects[i].color = palettes[palette][floor( random(0, 5))];
+	}
 }
 
 function renderDisplay(data) {
