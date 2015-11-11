@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="p5.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="balls.js"></script>
+		<script src="Ball.js"></script>
+		<style>
+			* {
+				padding:0px;
+				margin:0px;
+			}
+		</style>
+	</head>
+	<body>
+	</body>
+</html>

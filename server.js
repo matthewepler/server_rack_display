@@ -11,6 +11,10 @@ app.get('/', function(req, res) {
 	res.sendFile('/index.html');	
 });
 
+app.get('/balls', function(req, res) {
+	res.sendFile('/Balls/index.html');
+});
+
 socketServer.on('connection', function(socket) {
 
 	console.log('new connection @: ' + socket.handshake.address);
