@@ -12,11 +12,6 @@ app.get('/', function(req, res) {
 });
 
 app.get('/bars', function(req, res) {
-	if(req.headers.origin.includes("localhost")) {
-		res.header("Access-Control-Allow-Origin", "http://localhost:8000");
-	}
-	res.header("Access-Control-Allow-Origin", "*");
-
 	res.sendFile('Bars/index.html');
 });
 
