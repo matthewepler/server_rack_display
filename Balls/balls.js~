@@ -14,6 +14,7 @@ var angle;
 
 // objects
 var palettes;
+var palette;
 var balls;
 
 
@@ -48,17 +49,15 @@ function setup() {
 
 function draw() {
 	background(0);
-	
-	if (balls.length > 0) {
 
+	if (balls.length > 0) {
+		for (var i=0; i<balls.length; i++) {
+			balls[i].update();
+			balls[i].checkEdges();
+			balls[i].display();
+		}
 	} else {
 		drawStandby();
-	}
-	
-	for (var i=0; i<balls.length; i++) {
-		balls[i].update();
-		balls[i].checkEdges();
-		balls[i].display();
 	}
 }
 
@@ -94,18 +93,27 @@ function renderDisplay(data) {
 }
 
 function createBalls() {
+	// CPU Temp = color
+	var incomingPalette = floor( map(cpuTemp, 0, 1, 0, 5));
+	if (incomingPalette != palette) {
+		palette = incomingPalette;
+		for (var i=0; i< balls.length; i++) {
+			balls[i].color = palettes[palette][floor( random(0, 5))];
+		}
+	}
+
 	// Ram Use  = number
-	var numBalls = floor( map(ramUse, 0, 1, 0, 100));
+	var numBalls = floor( map(ramUse, 0, 1, 0, width/20));
 	if (balls.length < numBalls) {
 		for (var i=0; i< numBalls - balls.length; i++) {
-			balls.push( new Ball() );
+			balls.push( new Ball(palettes[palette][floor( random(0, 5))]));
 		}
 	} else if (balls.length > numBalls) {
 		balls.splice(numBalls, balls.length - numBalls);
 	}
 
 	// CPU Load = speed
-	var baseSpeed = floor( map(cpuLoad, 0, 1, 0.5, 17));
+	var baseSpeed = floor( map(cpuLoad, 0, 1, 0.5, 50));
 	for (var i=0; i<balls.length; i++) {
 		if( baseSpeed > 0) {
 			var currXaccel = balls[i].acceleration.x;
@@ -120,12 +128,7 @@ function createBalls() {
 		}
 	}
 
-	// CPU Temp = color
-	var palette = floor( map(cpuTemp, 0, 1, 0, 5));
-	for (var i=0; i<balls.length; i++) {
-		balls[i].color = 
 	}
-}
 
 function initConnection(data) {
 	console.log(data);
@@ -152,6 +155,24 @@ function drawStandby() {
 	angle >= 360 ? angle=0 : angle += 2;
 
 }
+
+function keyPressed() {
+	if (key == '1') {
+		resizeCanvas(3840, 716);
+		resetBallsPos();
+	} else if (key == '2') {
+		resizeCanvas(500, 500);
+		resetBallsPos();
+	}
+}
+
+function resetBallsPos() {
+	for (var i=0; i<balls.length; i++) {
+		balls[i].position = createVector(random(0, width), random(0, height));
+	}
+
+}
+
 
 function initPalettes() { // if you change number of palettes/color, be sure to also change variables in createBars();
 	palettes = [
@@ -191,4 +212,5 @@ function initPalettes() { // if you change number of palettes/color, be sure to 
 			['rgb(240, 26, 7)']
 		]
 	];
+	 
 }

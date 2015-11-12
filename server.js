@@ -24,7 +24,6 @@ app.get('rings', function(req, res) {
 });
 
 socketServer.on('connection', function(socket) {
-
 	console.log('new connection @: ' + socket.handshake.address);
 	socket.emit('connected', "server sez: hello!");
 	
@@ -44,5 +43,5 @@ app.get('/update', function(req, res) {
 	if(req.headers.origin.includes("localhost")) {
 		res.header('Access-Control-Allow-Origin', '*');
 	}
-	res.end('thank you come again');
+	res.end();
 });

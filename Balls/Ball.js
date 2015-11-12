@@ -1,11 +1,11 @@
 // stolen from Daniel Shiffman
 // http://natureofcode.com
 
-function Ball() {
-	this.size = 48;
+function Ball(color) {
+	this.size = 200;
 	this.position = createVector(random(0, width), random(0, height) );
 	this.acceleration = createVector(3, 10);
-	this.color = color(127);
+	this.color = color;
 	
 	this.update = function() {
 		this.position.add(this.acceleration);
