@@ -3,8 +3,6 @@ var socket;
 
 // data
 var prevTime;
-var sampleWindow;
-var cpuLoadSample, ramUseSample, cpuTempSample;
 var cpuLoadRan, ramUseRan, cpuTempRan;
 
 // drawing 
@@ -15,11 +13,15 @@ var palettes;
 // objects
 var objects;
 
+// add-ons
+var freqCounter;
+
 
 function setup() {
 	createCanvas(500, 500);
 	// createCanvas(3840, 716);
 	initEnvironment();
+	noSmooth();
 }
 
 function draw() {
@@ -32,6 +34,7 @@ function draw() {
 				objects[i].display();
 			} else {
 				objects.splice(i, 1);
+				console.log("dead");
 			}
 		}
 	} else {
@@ -45,19 +48,26 @@ function createObjects() { // assing vars to object attr.
 	// ramUse = starting diameter 
 	var startDiameter = map(ramUse, 0, 1, 0, width - (0.15 * width));
 
-	// cpuLoad = frequency 
-	var frequency = floor( map(cpuLoad, 0, 1, 500, 50));
-	var margin = random(-100, 100);
-	var currTime = millis();
-	if (currTime - prevTime > frequency + margin) {
-		objects.push( new Ring(startDiameter) );
-		prevTime = currTime;
-	}
-
 	// cpuTemp = color 
 	var palette = floor( map(cpuTemp, 0, 1, 0, 5));
-	for (var i=0; i<objects.length; i++) {
-		objects[i].color = palettes[palette][floor( random(0, 5))];
+	color = palettes[palette][floor( random(0, 5))];
+
+	// cpuLoad = speed + frequency 
+	var speed = map(cpuLoad, 0, 1, 120, 30);
+	//var speed = 80;
+	//freqCounter += cpuLoad;
+	//var threshold = map(cpuLoad, 0, 1, 2, 0.02);
+	//console.log( freqCounter + " : " + threshold);
+	//if (freqCounter > threshold + random(0.01, 0.5)) {
+	//	objects.push( new Ring(startDiameter, speed, color ));
+	//	freqCounter = 0;
+	//}
+	
+
+	// frequency of new Rings generated 
+	var frequency = random(0, 1);
+	if (frequency < 0.35) {
+		objects.push( new Ring(startDiameter, speed, color ));
 	}
 }
 
@@ -93,6 +103,14 @@ function drawStandby() {
 	pop();
 	angle >= 360 ? angle=0 : angle += 2;
 
+}
+
+function keyPressed() {
+	if (key == '1') {	
+		resizeCanvas(3840, 716);
+	} else if (key == '2') {
+		resizeCanvas(500, 500);
+	}
 }
 
 function initPalettes() { // if you change number of palettes/color, be sure to also change variables in createBars();
@@ -149,8 +167,6 @@ function initEnvironment() {
 
 	// data 
 	prevTime = 3000;
-	cpuLoadSample, ramUseSample, cpuTempSample = 0;
-	cpuLoadRan, ramUseRan, cpuTempRan = 0;
 	cpuLoad, ramUse, cpuTemp = 0;
 
 	// drawing
@@ -159,4 +175,7 @@ function initEnvironment() {
 
 	// objects
 	objects = [];
+
+	// add-ons
+	freqCounter = 0;
 }
