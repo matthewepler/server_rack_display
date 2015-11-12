@@ -40,7 +40,6 @@ function draw() {
 	} else {
 		drawStandby();
 	}
-	// call object update/draw methods 
 }
 
 function createObjects() { // assing vars to object attr.
@@ -110,7 +109,7 @@ function keyPressed() {
 		resizeCanvas(3840, 716);
 	} else if (key == '2') {
 		resizeCanvas(500, 500);
-	}
+	} 
 }
 
 function initPalettes() { // if you change number of palettes/color, be sure to also change variables in createBars();

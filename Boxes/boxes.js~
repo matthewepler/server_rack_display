@@ -7,40 +7,55 @@ var cpuLoad, ramUse, cpuTemp;
 // drawing 
 var angle;
 var palettes;
+var palette;
+var strokeColor;
 
 // objects
 var objects;
 
 
 function setup() {
-	createCanvas(500, 500);
-	// createCanvas(3840, 716);
+	//createCanvas(500, 500, WEBGL);
+	createCanvas(3840, 716, WEBGL);
 	initEnvironment();
 }
 
 function draw() {
 	background(0);
-	if (objects.size > 0) {
+	//console.log(objects.length);
+
+	directionalLight(200, 0, 0, 0.25, 0.25, 0.25);
+	pointLight(red(strokeColor), green(strokeColor), blue(strokeColor), 0, 1, 0); 
+	if (objects.length > 0) {
 		for (var i=0; i<objects.length; i++) {
-			if(!objects[i].dead) {
-				objects[i].update();
-				objects[i].display();
-			} else {
-				objects.splice(i, 1);
-			}
+			objects[i].display();
 		}
-	} else {
-		drawStandby();
 	}
-}
+}	
 
 function createObjects() { // assing vars to object attr.
-	// cpuLoad = 
+	// cpuLoad = speed of spin
+	var rotation = map(cpuLoad, 0, 1, 0.05, 0.75);
+	for (var i=0; i<objects.length; i++) {
+		objects[i].rotation = rotation;
+	}
 
 	// cpuTemp = color
-	var palette = floor( map(cpuTemp, 0, 1, 0, 5));
+	var incomingPalette = floor( map(cpuTemp, 0, 1, 0, 5));
+	if (incomingPalette != palette) {
+		palette = incomingPalette;
+		strokeColor = color(palettes[palette]);
+	}
 
-	// ramUse = 
+	// ramUse = number of boxes
+	var numBoxes = floor( map(ramUse, 0, 1, 20, 150));
+	if (objects.length < numBoxes) {
+		for (var i=0; i<numBoxes - objects.length; i++) {
+			objects.push( new Box(random(0, TWO_PI)));
+		}
+	} else if (objects.length > numBoxes) {
+		objects.splice(numBoxes, objects.length - numBoxes);
+	}
 }
 
 function renderData(data) {
@@ -51,21 +66,6 @@ function renderData(data) {
 	cpuTemp = data.cpuTemp / 100;
 	
 	createObjects();
-}
-
-function drawStandby() {
-	push();
-		translate(width/2, height/2);
-		fill(9,80,255);
-		noStroke();
-		rotate(angle);
-		ellipse(125, 0, 30, 30);
-		fill(9,80,255, 200);
-		rotate(angle-5);
-		ellipse(125, 0, 30, 30);
-
-	pop();
-	angle >= 360 ? angle=0 : angle += 2;
 }
 
 function keyPressed() {
@@ -86,7 +86,7 @@ function initEnvironment() {
 		socket.on('render', renderData);
 		socket.on('connected', initConnection);
 		socket.on('disconnected', closeConnection);
-	}, 3000);
+	}, 500);
 
 	// data 
 	cpuLoad, ramUse, cpuTemp = 0;
@@ -94,6 +94,8 @@ function initEnvironment() {
 	// drawing
 	angle = 0;
 	angleMode(DEGREES);
+	palette = 0;
+	strokeColor = color(0);
 
 	// objects
 	objects = [];
@@ -101,43 +103,7 @@ function initEnvironment() {
 }
 
 function initPalettes() { // if you change number of palettes/color, be sure to also change variables in createBars();
-	palettes = [
-		[
-			['rgba(9, 80, 255, '],
-			['rgba(68, 178, 255, '],
-			['rgba(20, 52, 135, '],
-			['rgba(63, 66, 135, '],
-			['rgba(22, 40, 135, ']
-		],
-		[
-			['rgba(12, 120, 135, '],
-			['rgba(76, 135, 132, '],
-			['rgba(94, 234, 218, '],
-			['rgba(26, 234, 167, '],
-			['rgba(10, 141, 114, ']
-		],
-		[
-    		['rgba(11, 141, 69, '],
-			['rgba(20, 233, 60, '],
-			['rgba(45, 82, 40, '],
-			['rgba(99, 175, 63, '],
-			['rgba(133, 175, 62, ']
-		],
-		[
-			['rgba(175, 156, 37, '],
-			['rgba(236, 211, 5, '],
-			['rgba(211, 161, 27, '],
-			['rgba(160, 121, 21, '],
-			['rgba(241, 102, 13, ']
-		],
-		[
-    		['rgba(241, 48, 8, '],
-			['rgba(151, 30, 5, '],
-			['rgba(151, 32, 55, '],
-			['rgba(240, 50, 88, '],
-			['rgba(240, 26, 7, ']
-		]
-	];
+	palettes = [ 'rgb(68, 178, 255)', 'rgb(26, 234, 167)', 'rgb(20, 233, 60)', 'rgb(240, 154, 15)', 'rgb(255, 0, 0)' ];
 }
 
 

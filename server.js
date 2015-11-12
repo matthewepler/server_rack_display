@@ -19,8 +19,16 @@ app.get('/balls', function(req, res) {
 	res.sendFile('/Balls/index.html');
 });
 
-app.get('rings', function(req, res) {
+app.get('/rings', function(req, res) {
 	res.sendFile('Rings/index.html');
+});
+
+app.get('/oscillator', function(req, res) {
+	res.sendFile('Oscillator/index.html');
+});
+
+app.get('/boxes', function(req, res) {
+	res.sendFile('Boxes/index.html');
 });
 
 socketServer.on('connection', function(socket) {
