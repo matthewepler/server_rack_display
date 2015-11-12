@@ -86,7 +86,7 @@ function initEnvironment() {
 		socket.on('render', renderData);
 		socket.on('connected', initConnection);
 		socket.on('disconnected', closeConnection);
-	}, 3000);
+	}, 500);
 
 	// data 
 	cpuLoad, ramUse, cpuTemp = 0;

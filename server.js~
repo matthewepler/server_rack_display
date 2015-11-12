@@ -31,6 +31,10 @@ app.get('/boxes', function(req, res) {
 	res.sendFile('Boxes/index.html');
 });
 
+app.get('/text', function(req, res) {
+	res.sendFile('Text/index.html');
+});
+
 socketServer.on('connection', function(socket) {
 	console.log('new connection @: ' + socket.handshake.address);
 	socket.emit('connected', "server sez: hello!");

@@ -86,15 +86,10 @@ function initEnvironment() {
 		socket.on('render', renderData);
 		socket.on('connected', initConnection);
 		socket.on('disconnected', closeConnection);
-	}, 3000);
+	}, 500);
 
 	// data 
-	sampleWindow = 50;   // average readings every sec and use them to draw
-	prevTime = 0;
-	cpuLoadSample, ramUseSample, cpuTempSample = 0;
-	cpuLoadRan, ramUseRan, cpuTempRan = 0;
 	cpuLoad, ramUse, cpuTemp = 0;
-	sampleCounter = 0;
 
 	// drawing
 	angle = 0;
