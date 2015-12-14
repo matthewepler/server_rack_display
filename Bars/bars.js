@@ -37,14 +37,14 @@ function setup() {
 		socket.on('render', renderDisplay);
 		socket.on('connected', initConnection);
 		socket.on('disconnected', closeConnection);
-	}, 3000);
+	}, 500);
 
 	// data 
-	sampleWindow = 50;   // average readings every sec and use them to draw
+	sampleWindow = 500;   // average readings every sec and use them to draw
+	sampleRate = 0;
 	prevTime = 0;
-	cpuLoadSample, ramUseSample, cpuTempSample = 0;
-	cpuLoadRan, ramUseRan, cpuTempRan = 0;
-	cpuLoad, ramUse, cpuTemp = 0;
+	cpuLoadSample, ramUseSample, cpuTempSample = 50;
+	cpuLoad, ramUse, cpuTemp = 50;
 	sampleCounter = 0;
 }
 
@@ -73,12 +73,9 @@ function renderDisplay(data) {
 	cpuLoadSample += data.cpuLoad / 100;	
 	ramUseSample  += data.ramUse  / 100;
 	cpuTempSample += data.cpuTemp / 100;
-	cpuLoadRan = data.cpuLoadRan;
-	ramUseRan  = data.ramUseRan;
-	cpuTempRan = data.cpuTempRan;
 	sampleCounter += 1;
 	
-	if (currTime - prevTime > sampleWindow && sampleCounter > 0) {
+	if (currTime - prevTime > sampleWindow) {
 		cpuLoad = cpuLoadSample / sampleCounter;
 		ramUse  = ramUseSample  / sampleCounter;
 		cpuTemp = cpuTempSample / sampleCounter;
@@ -119,7 +116,7 @@ function Bar(startY, barHeight, color) {
 	}
 
 	this.update = function() {
-		this.alpha <= 0.0 ? this.dead = true : this.alpha -= 0.01;
+		this.alpha <= 0.1 ? this.dead = true : this.alpha -= 0.01;
 	}
 }
 
@@ -129,13 +126,16 @@ function createBars() {
 
 	// cpuTemp = color of bars
 	var palette = floor( map(cpuTemp, 0, 1, 0, 5));
-	console.log(palette);
 
-	// ramUse  = number of bars
+	// ramUse  = number of bars and refresh time
 	var numBars = map(ramUse, 0, 1, maxHeight/15, 0);
 	for (var i=0; i<numBars; i++) {
-		bars.push( new Bar(random( height, height - maxHeight), maxHeight/numBars, palettes[palette][floor(random(0, 5))]));
+		bars.push( new Bar(random( height, height - maxHeight), maxHeight/numBars, palettes[palette][floor(random(0, 5))])); 
 	}
+
+	// sample window
+	var sampleRate = map(ramUse, 0, 1, 0, 1500) || 500; 
+	sampleWindow = sampleRate;
 }
 
 function drawStandby() {
