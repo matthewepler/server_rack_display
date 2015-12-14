@@ -1,6 +1,8 @@
 # Server Rack Display
 This system is designed to display real-time network data. It receives GET requests with the data set in query parameters and publishes them to a browser canvas. 
 
+!! NOTE: Nothing will launch automatically upon bootup. Until we decide what system we are going with, you will need a keyboard and monitor. 
+
 ### Hardware
 * 2U rack (dim)
 * Mac Mini
@@ -86,5 +88,7 @@ TEXT
 - Neuron/Node animation
 - Particle Illusion tests (Peter's suggestion)
 - show new results to Peter and get feedback for next round
+- make final solution boot up automatically 
+- add connection feedback
 - single screen solution is shipping from China and should be installed soon
 - try NeoPixel solution (LED) 
