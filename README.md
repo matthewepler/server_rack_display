@@ -47,9 +47,10 @@ httpGet(baseURL, null, null, null, function(err) {
 
 ### Running Locally
 If running locally and you need to feed it some dummy data, use the “Sender App” to do that:
-1. open another Terminal window, and cd into the “server_rack_display/sender_app” directory.
-2. run “python -m SimpleHTTPServer 8000”
-3. open new browser window and navigate to localhost:8000 to see the data controls
+
+1. open another Terminal window, and ```cd``` into the “server_rack_display/sender_app” directory.
+2. run ```python -m SimpleHTTPServer 8000```
+3. open new browser window and navigate to```localhost:8000``` to see the data controls
 
 This app will send a GET request with the data in the query parameters, just like it would happen with any other real data.
 
