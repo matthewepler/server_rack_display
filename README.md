@@ -4,16 +4,16 @@ This system is designed to display real-time network data. It receives GET reque
 !! NOTE: Nothing will launch automatically upon bootup. Until we decide what system we are going with, you will need a keyboard and monitor. 
 
 ### Hardware
-* 2U rack (dim)
+* [2U rack](https://www.amazon.com/gp/product/B00GRKP5C0/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
 * Mac Mini
-* Matrox TripleHeadToGo Digital SE
-* 3x HDMI screens
-* 3x 2A power supplies
+* [Matrox TripleHeadToGo Digital SE](https://www.amazon.com/Matrox-T2G-DP3D-IF-TripleHead2Go-Digital-SE/dp/B009N6XAEA/ref=sr_1_1?ie=UTF8&qid=1450110585&sr=8-1&keywords=matrox+triplehead2go+digital+se)
+* [3x HDMI screens](https://www.adafruit.com/products/2109)
+* [3x 2A power supplies](https://www.amazon.com/gp/product/B00WHTW4QK/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
 * power strip
 * 3x HDMI cables
 * miniDisplay and USB extension cables
-* 3D printed frame for HDMI screens (link)
-* Laser cut frame for faceplate (link)
+* 3D printed frame for HDMI screens [link](coming soon)
+* Laser cut frame for faceplate [link](https://drive.google.com/a/humanconditionglobal.com/folderview?id=0B49L6AMZQTvQMDEwS0pRSWZYOTQ&usp=sharing)
 
 ### Software
 Make sure the Triple Head is setup properly and the three external screens are showing as a single screen before proceeding.
